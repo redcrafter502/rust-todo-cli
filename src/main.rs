@@ -59,10 +59,49 @@ enum ListCommandFilter {
 
 fn list_command(filter: ListCommandFilter) {
     match filter {
-        ListCommandFilter::Everything => println!("list"),
+        ListCommandFilter::Everything => {
+            println!("list");
+            let todos = get_todos_from_file();
+
+            for (id, done, content) in todos {
+                println!("ID: {}, Done: {}, Content: {}", id, done, content);
+            }
+        }
         ListCommandFilter::Done => println!("list --done"),
         ListCommandFilter::Undone => println!("list --undone"),
     }
+}
+
+fn get_todos_from_file() -> Vec<(i32, bool, String)> {
+    let file = File::open("todos.txt").expect("Could not open file");
+    let reader = BufReader::new(file);
+
+    let todos: Vec<(i32, bool, String)> = reader
+        .lines()
+        .filter_map(|line| match line {
+            Ok(line) => {
+                let parts: Vec<&str> = line.split(':').collect();
+                if parts.len() >= 3 {
+                    let id = parts[0].parse::<i32>().expect("Could not parse id");
+                    let done = match parts[1] {
+                        "0" => false,
+                        "1" => true,
+                        _ => false,
+                    };
+                    let content = parts[2..(parts.len())].join(":").to_string();
+                    Some((id, done, content))
+                } else {
+                    eprintln!("Skipping line due to insufficient parts: {}", line);
+                    None
+                }
+            }
+            Err(error) => {
+                eprintln!("Could not read line: {}", error);
+                None
+            }
+        })
+        .collect();
+    return todos;
 }
 
 fn add_command(todo_content: &str) {
