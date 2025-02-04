@@ -7,45 +7,33 @@ use std::env::args;
 
 fn main() {
     let input: Vec<String> = args().collect();
-
-    println!("Input: {:?}", input);
-
     match input.len() {
         1 => println!("No arguments provided"),
-        2 => one_argument(input[1].as_str()),
-        3 => two_arguments(input[1].as_str(), input[2].as_str()),
+        2 => parse_arguments(input[1].as_str(), None),
+        3 => parse_arguments(input[1].as_str(), Some(input[2].as_str())),
         _ => println!("Too many arguments provided"),
     }
 }
 
-fn one_argument(argument: &str) {
-    match argument {
-        "--version" => print_version(),
-        "-v" => print_version(),
-        "--help" => print_default_help(),
-        "list" => list_command(ListCommandFilter::Everything),
-        _ => println!("Unknown command: {}", argument),
-    }
-}
-
-fn two_arguments(first_argument: &str, second_argument: &str) {
+fn parse_arguments(first_argument: &str, second_argument: Option<&str>) {
     match (first_argument, second_argument) {
-        ("list", "--help") => println!("HELP: TODO"),
-        ("list", "--done") => list_command(ListCommandFilter::Done),
-        ("list", "--undone") => list_command(ListCommandFilter::Undone),
-        //("list", _) => list_command(ListCommandFilter::Everything),
-        ("add", "--help") => println!("HELP: TODO"),
-        ("add", _) => add_command(second_argument),
-        ("done", "--help") => println!("HELP: TOOD"),
-        ("done", _) => mark_done_command(second_argument),
-        ("undone", "--help") => println!("HELP: TODO"),
-        ("undone", _) => mark_undone_command(second_argument),
-        ("remove", "--help") => println!("HELP: TODO"),
-        ("remove", _) => remove_command(second_argument),
-        //("--version", _) => print_version(),
-        //("-v", _) => print_version(),
-        //("--help", _) => print_default_help(),
-        _ => println!("Unknown command: {} {}", first_argument, second_argument),
+        ("list", Some("--help")) => println!("HELP: TODO"),
+        ("list", Some("--done")) => list_command(ListCommandFilter::Done),
+        ("list", Some("--undone")) => list_command(ListCommandFilter::Undone),
+        ("list", None) => list_command(ListCommandFilter::Everything),
+        ("add", Some("--help")) => println!("HELP: TODO"),
+        ("add", Some(todo_content)) => add_command(todo_content),
+        ("done", Some("--help")) => println!("HELP: TOOD"),
+        ("done", Some(todo_id)) => mark_done_command(todo_id),
+        ("undone", Some("--help")) => println!("HELP: TODO"),
+        ("undone", Some(todo_id)) => mark_undone_command(todo_id),
+        ("remove", Some("--help")) => println!("HELP: TODO"),
+        ("remove", Some(todo_id)) => remove_command(todo_id),
+        ("--version", None) => print_version(),
+        ("-v", None) => print_version(),
+        ("--help", None) => print_default_help(),
+        (_, Some(thing)) => println!("Unknown command: {} {}", first_argument, thing),
+        (_, None) => println!("Unknown command: {}", first_argument),
     }
 }
 
