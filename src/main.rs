@@ -69,14 +69,29 @@ fn list_command(filter: ListCommandFilter) {
     match filter {
         ListCommandFilter::Everything => {
             let todos = get_todos_from_file();
+            let todos = todos.iter().collect();
             display_todos_in_table(todos);
         }
-        ListCommandFilter::Done => println!("list --done"),
-        ListCommandFilter::Undone => println!("list --undone"),
+        ListCommandFilter::Done => {
+            let todos = get_todos_from_file();
+            let todos = todos
+                .iter()
+                .filter_map(|todo| if todo.done { Some(todo) } else { None })
+                .collect();
+            display_todos_in_table(todos);
+        }
+        ListCommandFilter::Undone => {
+            let todos = get_todos_from_file();
+            let todos = todos
+                .iter()
+                .filter_map(|todo| if !todo.done { Some(todo) } else { None })
+                .collect();
+            display_todos_in_table(todos);
+        }
     }
 }
 
-fn display_todos_in_table(todos: Vec<Todo>) {
+fn display_todos_in_table(todos: Vec<&Todo>) {
     let mut table = Table::new();
     table.add_row(row!["ID", "DONE", "CONTENT"]);
     for todo in todos {
