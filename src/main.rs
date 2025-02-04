@@ -59,6 +59,12 @@ enum ListCommandFilter {
     Undone,
 }
 
+struct Todo {
+    id: i32,
+    done: bool,
+    content: String,
+}
+
 fn list_command(filter: ListCommandFilter) {
     match filter {
         ListCommandFilter::Everything => {
@@ -70,20 +76,20 @@ fn list_command(filter: ListCommandFilter) {
     }
 }
 
-fn display_todos_in_table(todos: Vec<(i32, bool, String)>) {
+fn display_todos_in_table(todos: Vec<Todo>) {
     let mut table = Table::new();
     table.add_row(row!["ID", "DONE", "CONTENT"]);
-    for (id, done, content) in todos {
-        table.add_row(row![id, done, content]);
+    for todo in todos {
+        table.add_row(row![todo.id, todo.done, todo.content]);
     }
     table.printstd();
 }
 
-fn get_todos_from_file() -> Vec<(i32, bool, String)> {
+fn get_todos_from_file() -> Vec<Todo> {
     let file = File::open("todos.txt").expect("Could not open file");
     let reader = BufReader::new(file);
 
-    let todos: Vec<(i32, bool, String)> = reader
+    let todos: Vec<Todo> = reader
         .lines()
         .filter_map(|line| match line {
             Ok(line) => {
@@ -96,7 +102,7 @@ fn get_todos_from_file() -> Vec<(i32, bool, String)> {
                         _ => false,
                     };
                     let content = parts[2..(parts.len())].join(":").to_string();
-                    Some((id, done, content))
+                    Some(Todo { id, done, content })
                 } else {
                     eprintln!("Skipping line due to insufficient parts: {}", line);
                     None
