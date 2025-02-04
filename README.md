@@ -5,6 +5,8 @@
 - `todos list`
 - `todos list --done`
 - `todos list --undone`
+- `todos done <id>`
+- `todos undone <id>`
 - `todos remove <id>`
 
 ## Storage format
