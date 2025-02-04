@@ -161,7 +161,12 @@ fn add_command(todo_content: &str) {
         .expect("Could not open file");
 
     writeln!(file, "{}:0:{}", id, todo_content).expect("Could not write to file");
-    println!("Created Todo: {}", todo_content);
+
+    display_todos_in_table(vec![&Todo {
+        id,
+        done: false,
+        content: todo_content.to_string(),
+    }]);
 }
 
 fn remove_command(todo_id: &str) {
