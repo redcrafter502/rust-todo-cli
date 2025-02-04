@@ -17,7 +17,7 @@ fn main() {
 
 fn parse_arguments(first_argument: &str, second_argument: Option<&str>) {
     match (first_argument, second_argument) {
-        ("list", Some("--help")) => println!("HELP: TODO"),
+        ("list", Some("--help")) => print_list_help(),
         ("list", Some("--done")) => list_command(ListCommandFilter::Done),
         ("list", Some("--undone")) => list_command(ListCommandFilter::Undone),
         ("list", None) => list_command(ListCommandFilter::Everything),
@@ -43,4 +43,11 @@ fn print_version() {
 
 fn print_default_help() {
     println!("Usage: todos [command] [arguments]");
+}
+
+fn print_list_help() {
+    println!("list: lists all of your todos and optionally filters them by done status");
+    println!("Usage: todos list");
+    println!("Usage: todos list --done");
+    println!("Usage: todos list --undone");
 }
