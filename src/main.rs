@@ -1,7 +1,12 @@
 mod commands;
+mod help;
 use commands::{
     add_command, list_command, mark_done_command, mark_undone_command, remove_command,
     ListCommandFilter,
+};
+use help::{
+    print_add_help, print_default_help, print_done_help, print_list_help, print_remove_help,
+    print_undone_help,
 };
 use std::env::args;
 
@@ -39,35 +44,4 @@ fn parse_arguments(first_argument: &str, second_argument: Option<&str>) {
 
 fn print_version() {
     println!("Version: 0.1.0");
-}
-
-fn print_default_help() {
-    println!("Usage: todos [command] [arguments]");
-}
-
-fn print_list_help() {
-    println!("list: lists all of your todos and optionally filters them by done status");
-    println!("Usage: todos list");
-    println!("Usage: todos list --done");
-    println!("Usage: todos list --undone");
-}
-
-fn print_add_help() {
-    println!("add: adds a todo to your list of todos");
-    println!("Usage: todos add [content of your todo]");
-}
-
-fn print_done_help() {
-    println!("done: marks a todo as done");
-    println!("Usage: todos done [id of the todo]")
-}
-
-fn print_undone_help() {
-    println!("done: marks a todo as undone");
-    println!("Usage: todos undone [id of the todo]");
-}
-
-fn print_remove_help() {
-    println!("remove: removes an todo from your list");
-    println!("Usage: todos remove [id of the todo]")
 }
