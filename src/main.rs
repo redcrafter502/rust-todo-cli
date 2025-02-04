@@ -1,3 +1,5 @@
+use std::io::Write;
+
 fn main() {
     let input: Vec<String> = std::env::args().collect();
 
@@ -61,7 +63,17 @@ fn list_command(filter: ListCommandFilter) {
 }
 
 fn add_command(todo_content: &str) {
-    println!("add {}", todo_content);
+    let id = 1;
+    let content_to_be_added_to_file = format!("{}:0:{}\n", id, todo_content);
+
+    let mut file = std::fs::OpenOptions::new()
+        .append(true)
+        .create(true)
+        .open("todos.txt")
+        .expect("Could not open file");
+    file.write_all(content_to_be_added_to_file.as_bytes())
+        .expect("Could not write to file");
+    println!("Created Todo: {}", todo_content);
 }
 
 fn remove_command(todo_id: &str) {
