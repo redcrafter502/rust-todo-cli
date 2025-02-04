@@ -148,6 +148,7 @@ pub fn mark_done_command(todo_id: &str) {
 
     if !found {
         eprintln!("Todo with id {} not found.", todo_id);
+        return;
     }
 
     let file = File::create(FILE_PATH).expect("Could not open file");
@@ -188,6 +189,7 @@ pub fn mark_undone_command(todo_id: &str) {
 
     if !found {
         eprintln!("Todo with id {} not found.", todo_id);
+        return;
     }
 
     let file = File::create(FILE_PATH).expect("Could not open file");
@@ -199,5 +201,40 @@ pub fn mark_undone_command(todo_id: &str) {
 }
 
 pub fn remove_command(todo_id: &str) {
-    println!("remove {}", todo_id);
+    let todo_id = todo_id.parse::<i32>().expect("The id needs to be a number");
+    let file = File::open(FILE_PATH)
+        .or_else(|_| OpenOptions::new().create(true).write(true).open(FILE_PATH))
+        .expect("Could not open file");
+
+    let reader = BufReader::new(file);
+    let mut lines: Vec<String> = Vec::new();
+    let mut found = false;
+
+    for line in reader.lines() {
+        let line = line.expect("Could not read line");
+        let parts: Vec<&str> = line.split(':').collect();
+        let line_id = parts[0].parse::<i32>().expect("Could not parse id");
+        if line_id == todo_id {
+            found = true;
+            display_todos_in_table(vec![&Todo {
+                id: line_id,
+                done: false,
+                content: parts[2..parts.len()].join(":"),
+            }]);
+        } else {
+            lines.push(line);
+        }
+    }
+
+    if !found {
+        eprintln!("Todo with id {} not found.", todo_id);
+        return;
+    }
+
+    let file = File::create(FILE_PATH).expect("Could not open file");
+    let mut writer = BufWriter::new(file);
+
+    for line in lines {
+        writeln!(writer, "{}", line).expect("Could not write to file");
+    }
 }
