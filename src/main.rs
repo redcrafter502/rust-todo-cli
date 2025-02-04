@@ -23,9 +23,9 @@ fn parse_arguments(first_argument: &str, second_argument: Option<&str>) {
         ("list", None) => list_command(ListCommandFilter::Everything),
         ("add", Some("--help")) => print_add_help(),
         ("add", Some(todo_content)) => add_command(todo_content),
-        ("done", Some("--help")) => println!("HELP: TOOD"),
+        ("done", Some("--help")) => print_done_help(),
         ("done", Some(todo_id)) => mark_done_command(todo_id),
-        ("undone", Some("--help")) => println!("HELP: TODO"),
+        ("undone", Some("--help")) => print_undone_help(),
         ("undone", Some(todo_id)) => mark_undone_command(todo_id),
         ("remove", Some("--help")) => println!("HELP: TODO"),
         ("remove", Some(todo_id)) => remove_command(todo_id),
@@ -55,4 +55,14 @@ fn print_list_help() {
 fn print_add_help() {
     println!("add: adds a todo to your list of todos");
     println!("Usage: todos add [content of your todo]");
+}
+
+fn print_done_help() {
+    println!("done: marks a todo as done");
+    println!("Usage: todos done [id of the todo]")
+}
+
+fn print_undone_help() {
+    println!("done: marks a todo as undone");
+    println!("Usage: todos undone [id of the todo]")
 }
