@@ -23,3 +23,4 @@ Example:
 - [x] Mark todos as done
 - [x] Mark todos as undone
 - [ ] Delete a todo from the list
+- [ ] Add help
