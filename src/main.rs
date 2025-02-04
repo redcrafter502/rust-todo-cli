@@ -63,16 +63,20 @@ fn list_command(filter: ListCommandFilter) {
     match filter {
         ListCommandFilter::Everything => {
             let todos = get_todos_from_file();
-            let mut table = Table::new();
-            table.add_row(row!["ID", "DONE", "CONTENT"]);
-            for (id, done, content) in todos {
-                table.add_row(row![id, done, content]);
-            }
-            table.printstd();
+            display_todos_in_table(todos);
         }
         ListCommandFilter::Done => println!("list --done"),
         ListCommandFilter::Undone => println!("list --undone"),
     }
+}
+
+fn display_todos_in_table(todos: Vec<(i32, bool, String)>) {
+    let mut table = Table::new();
+    table.add_row(row!["ID", "DONE", "CONTENT"]);
+    for (id, done, content) in todos {
+        table.add_row(row![id, done, content]);
+    }
+    table.printstd();
 }
 
 fn get_todos_from_file() -> Vec<(i32, bool, String)> {
