@@ -193,10 +193,14 @@ fn mark_done_command(todo_id: &str) {
         let parts: Vec<&str> = line.split(':').collect();
         let line_id = parts[0].parse::<i32>().expect("Could not parse id");
         if line_id == todo_id {
-            println!("This is the line {}", line);
             let modified_line = format!("{}:1:{}", line_id, parts[2..parts.len()].join(":"));
             lines.push(modified_line);
             found = true;
+            display_todos_in_table(vec![&Todo {
+                id: line_id,
+                done: true,
+                content: parts[2..parts.len()].join(":"),
+            }]);
         } else {
             lines.push(line);
         }
