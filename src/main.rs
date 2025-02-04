@@ -36,6 +36,10 @@ fn two_arguments(first_argument: &str, second_argument: &str) {
         //("list", _) => list_command(ListCommandFilter::Everything),
         ("add", "--help") => println!("HELP: TODO"),
         ("add", _) => add_command(second_argument),
+        ("done", "--help") => println!("HELP: TOOD"),
+        ("done", _) => mark_done_command(second_argument),
+        ("undone", "--help") => println!("HELP: TODO"),
+        ("undone", _) => mark_undone_command(second_argument),
         ("remove", "--help") => println!("HELP: TODO"),
         ("remove", _) => remove_command(second_argument),
         //("--version", _) => print_version(),
@@ -167,6 +171,14 @@ fn add_command(todo_content: &str) {
         done: false,
         content: todo_content.to_string(),
     }]);
+}
+
+fn mark_done_command(todo_id: &str) {
+    println!("marked as done {}", todo_id);
+}
+
+fn mark_undone_command(todo_id: &str) {
+    println!("marked as undone {}", todo_id)
 }
 
 fn remove_command(todo_id: &str) {
