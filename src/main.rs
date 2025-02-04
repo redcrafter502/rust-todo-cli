@@ -1,4 +1,7 @@
-use std::io::Write;
+use std::{
+    fs::{File, OpenOptions},
+    io::{BufRead, BufReader, Write},
+};
 
 fn main() {
     let input: Vec<String> = std::env::args().collect();
@@ -63,16 +66,34 @@ fn list_command(filter: ListCommandFilter) {
 }
 
 fn add_command(todo_content: &str) {
-    let id = 1;
-    let content_to_be_added_to_file = format!("{}:0:{}\n", id, todo_content);
+    let mut id = 1;
 
-    let mut file = std::fs::OpenOptions::new()
+    let file = File::open("todos.txt")
+        .or_else(|_| {
+            OpenOptions::new()
+                .create(true)
+                .write(true)
+                .open("todos.txt")
+        })
+        .expect("Could not open file");
+
+    let reader = BufReader::new(file);
+    for line in reader.lines() {
+        let line = line.expect("Could not read line");
+        let parts: Vec<&str> = line.split(':').collect();
+        let current_id = parts[0].parse::<i32>().expect("Could not parse id");
+        if current_id >= id {
+            id = current_id + 1;
+        }
+    }
+
+    let mut file = OpenOptions::new()
         .append(true)
         .create(true)
         .open("todos.txt")
         .expect("Could not open file");
-    file.write_all(content_to_be_added_to_file.as_bytes())
-        .expect("Could not write to file");
+
+    writeln!(file, "{}:0:{}", id, todo_content).expect("Could not write to file");
     println!("Created Todo: {}", todo_content);
 }
 
