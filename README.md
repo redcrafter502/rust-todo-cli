@@ -16,10 +16,10 @@ Example:
 `2:1:Drink water` - A todo with the id 2 marked as done
 
 ## Todo
-- [ ] Add todos
-- [ ] List todos
-- [ ] List only done todos
-- [ ] List only undone todos
+- [x] Add todos
+- [x] List todos
+- [x] List only done todos
+- [x] List only undone todos
 - [ ] Mark todos as done
 - [ ] Mark todos as undone
 - [ ] Delete a todo from the list
