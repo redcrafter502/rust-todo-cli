@@ -5,6 +5,8 @@ use std::{
 
 use prettytable::{row, Table};
 
+const FILE_PATH: &str = "todos.txt";
+
 fn main() {
     let input: Vec<String> = std::env::args().collect();
 
@@ -105,7 +107,7 @@ fn display_todos_in_table(todos: Vec<&Todo>) {
 }
 
 fn get_todos_from_file() -> Vec<Todo> {
-    let file = File::open("todos.txt").expect("Could not open file");
+    let file = File::open(FILE_PATH).expect("Could not open file");
     let reader = BufReader::new(file);
 
     let todos: Vec<Todo> = reader
@@ -139,13 +141,8 @@ fn get_todos_from_file() -> Vec<Todo> {
 fn add_command(todo_content: &str) {
     let mut id = 1;
 
-    let file = File::open("todos.txt")
-        .or_else(|_| {
-            OpenOptions::new()
-                .create(true)
-                .write(true)
-                .open("todos.txt")
-        })
+    let file = File::open(FILE_PATH)
+        .or_else(|_| OpenOptions::new().create(true).write(true).open(FILE_PATH))
         .expect("Could not open file");
 
     let reader = BufReader::new(file);
@@ -161,7 +158,7 @@ fn add_command(todo_content: &str) {
     let mut file = OpenOptions::new()
         .append(true)
         .create(true)
-        .open("todos.txt")
+        .open(FILE_PATH)
         .expect("Could not open file");
 
     writeln!(file, "{}:0:{}", id, todo_content).expect("Could not write to file");
@@ -175,13 +172,8 @@ fn add_command(todo_content: &str) {
 
 fn mark_done_command(todo_id: &str) {
     let todo_id = todo_id.parse::<i32>().expect("The id needs to be a number");
-    let file = File::open("todos.txt")
-        .or_else(|_| {
-            OpenOptions::new()
-                .create(true)
-                .write(true)
-                .open("todos.txt")
-        })
+    let file = File::open(FILE_PATH)
+        .or_else(|_| OpenOptions::new().create(true).write(true).open(FILE_PATH))
         .expect("Could not open file");
 
     let reader = BufReader::new(file);
@@ -210,7 +202,7 @@ fn mark_done_command(todo_id: &str) {
         eprintln!("Todo with id {} not found.", todo_id);
     }
 
-    let file = File::create("todos.txt").expect("Could not open file");
+    let file = File::create(FILE_PATH).expect("Could not open file");
     let mut writer = BufWriter::new(file);
 
     for line in lines {
@@ -220,13 +212,8 @@ fn mark_done_command(todo_id: &str) {
 
 fn mark_undone_command(todo_id: &str) {
     let todo_id = todo_id.parse::<i32>().expect("The id needs to be a number");
-    let file = File::open("todos.txt")
-        .or_else(|_| {
-            OpenOptions::new()
-                .create(true)
-                .write(true)
-                .open("todos.txt")
-        })
+    let file = File::open(FILE_PATH)
+        .or_else(|_| OpenOptions::new().create(true).write(true).open(FILE_PATH))
         .expect("Could not open file");
 
     let reader = BufReader::new(file);
@@ -255,7 +242,7 @@ fn mark_undone_command(todo_id: &str) {
         eprintln!("Todo with id {} not found.", todo_id);
     }
 
-    let file = File::create("todos.txt").expect("Could not open file");
+    let file = File::create(FILE_PATH).expect("Could not open file");
     let mut writer = BufWriter::new(file);
 
     for line in lines {
