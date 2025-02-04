@@ -27,7 +27,7 @@ fn parse_arguments(first_argument: &str, second_argument: Option<&str>) {
         ("done", Some(todo_id)) => mark_done_command(todo_id),
         ("undone", Some("--help")) => print_undone_help(),
         ("undone", Some(todo_id)) => mark_undone_command(todo_id),
-        ("remove", Some("--help")) => println!("HELP: TODO"),
+        ("remove", Some("--help")) => print_remove_help(),
         ("remove", Some(todo_id)) => remove_command(todo_id),
         ("--version", None) => print_version(),
         ("-v", None) => print_version(),
@@ -64,5 +64,10 @@ fn print_done_help() {
 
 fn print_undone_help() {
     println!("done: marks a todo as undone");
-    println!("Usage: todos undone [id of the todo]")
+    println!("Usage: todos undone [id of the todo]");
+}
+
+fn print_remove_help() {
+    println!("remove: removes an todo from your list");
+    println!("Usage: todos remove [id of the todo]")
 }
