@@ -20,6 +20,6 @@ Example:
 - [x] List todos
 - [x] List only done todos
 - [x] List only undone todos
-- [ ] Mark todos as done
+- [x] Mark todos as done
 - [ ] Mark todos as undone
 - [ ] Delete a todo from the list
