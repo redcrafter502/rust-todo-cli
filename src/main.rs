@@ -3,6 +3,8 @@ use std::{
     io::{BufRead, BufReader, Write},
 };
 
+use prettytable::{row, Table};
+
 fn main() {
     let input: Vec<String> = std::env::args().collect();
 
@@ -60,12 +62,13 @@ enum ListCommandFilter {
 fn list_command(filter: ListCommandFilter) {
     match filter {
         ListCommandFilter::Everything => {
-            println!("list");
             let todos = get_todos_from_file();
-
+            let mut table = Table::new();
+            table.add_row(row!["ID", "DONE", "CONTENT"]);
             for (id, done, content) in todos {
-                println!("ID: {}, Done: {}, Content: {}", id, done, content);
+                table.add_row(row![id, done, content]);
             }
+            table.printstd();
         }
         ListCommandFilter::Done => println!("list --done"),
         ListCommandFilter::Undone => println!("list --undone"),
